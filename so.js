@@ -15,21 +15,33 @@ var post_options = {
 };
 
 
-var array = {};
+
 
 fs.readFile('urls.txt', function(err, data) {
 
-    if (err) throw err;
-    array = data.toString().split("\n");
+    //if (err) throw err;
+    //console.log(err);
+    var array = data.toString().split('\n');
+    for (var i = 0; i < array.length - 1; i++) {
+        str = array[i];
+        array[i] = str.slice(0, -1);
+    }
     //console.log(array);
 
+
     var emitter = new EventEmitter();
-    var counter = 0,
+    var counter = 1,
         n = array.length;
-    console.log(n);
+    //console.log(n);
+
+    // Start with the first request
+
+
 
     function PostRequest() {
         var post_req = http.request(post_options, function(res) {
+            //console.log('Status: ' + res.statusCode);
+            //console.log('Headers: ' + JSON.stringify(res.headers));
             res.setEncoding('utf8');
             var body = '';
             res.on('data', function(chunk) {
@@ -39,6 +51,7 @@ fs.readFile('urls.txt', function(err, data) {
                 body = JSON.parse(body);
                 // Make sure it's working
                 console.log(body.response.subject);
+                console.log(counter);
 
                 // ADD THE CALLBACK 
                 // OR 
@@ -50,16 +63,19 @@ fs.readFile('urls.txt', function(err, data) {
         });
 
         var url = array[counter];
-        var catURL = { "url": url, "path": "/", "port": "443", "live_scan": "false", "advanced": "true" };
-        post_req.write(JSON.stringify(catURL), function(err) {
-            //console.log(err);
-            post_req.end();
-        });
+        //console.log(url);
+        var catURL = { "url": url };
+        //console.log(catURL);
+        var jsonURL = catURL.toString();
+
+
+        post_req.write(JSON.stringify(catURL));
+        post_req.end();
     }
 
 
     emitter.on('ResponseEnded', function() {
-        ++counter;
+        counter++;
         if (counter < n) {
             PostRequest();
         } else {
@@ -68,6 +84,5 @@ fs.readFile('urls.txt', function(err, data) {
     });
 
 
-    // Start with the first request
     PostRequest();
 });
