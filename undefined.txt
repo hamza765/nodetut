@@ -32,3 +32,7 @@ sgcatest.trustwave.com
 stcatest.trustwave.com
 xgcatest.trustwave.com
 nerys-m1.wellsfargo.com/test.html
+www.openxades.org/docportal
+certum-ca.certum.pl
+certum-ctnca-ev.certum.pl
+pki.atos.net:7081

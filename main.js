@@ -6,7 +6,7 @@ var EventEmitter = require('events').EventEmitter;
 //When making a request, you need to send options and a callback
 var options = {
     host: 'api.imgur.com',
-    path: '/3/gallery/hot/viral/0.json',
+    path: '/3/account/lazy784/favorites',
     headers: { 'Authorization': 'Client-ID 0981a810f4e0eb0' }
 };
 
@@ -29,7 +29,7 @@ callback = function(response) {
         var test = body.data;
         //The response includes 3 keys: Data, Success, and Code. 
         //We only care about Data as that is where all the Image info is.
-
+        console.log(test);
         //Loop thru the array of posts on the gallery
         for (i = 0; i < test.length; i++) {
 

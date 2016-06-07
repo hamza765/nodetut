@@ -107,3 +107,11 @@ root5evtest.wosign.com
 root2evtest.wosign.com
 root1evtest.wosign.com
 root4evtest.wosign.com
+good.sca0a.amazontrust.com
+www.sk.ee
+valid-certum-ctncav2.certificates.certum.pl
+publifirma.firmaprofesional.com
+valid.domainplus.ca12.ssl.buypass.no
+valid.domainplus.ca22.ssl.buypass.no
+valid.evident.ca23.ssl.buypass.no
+testssl-valid-r1i1.disig.sk

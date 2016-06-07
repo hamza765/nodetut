@@ -19,29 +19,24 @@ var post_options = {
 
 fs.readFile('urls.txt', function(err, data) {
 
-    //if (err) throw err;
-    //console.log(err);
+    if (err) throw err;
+    console.log(err);
     var array = data.toString().split('\n');
-    for (var i = 0; i < array.length - 1; i++) {
+    for (var i = 0; i < array.length; i++) {
         str = array[i];
         array[i] = str.slice(0, -1);
+        
     }
     //console.log(array);
 
 
     var emitter = new EventEmitter();
-    var counter = 1,
+    var counter = 0,
         n = array.length;
-    //console.log(n);
 
-    // Start with the first request
-
-
-
-    function PostRequest() {
+    //function PostRequest() {
+    for (var i = 0; i < array.length - 1; i++) {
         var post_req = http.request(post_options, function(res) {
-            //console.log('Status: ' + res.statusCode);
-            //console.log('Headers: ' + JSON.stringify(res.headers));
             res.setEncoding('utf8');
             var body = '';
             res.on('data', function(chunk) {
@@ -50,55 +45,34 @@ fs.readFile('urls.txt', function(err, data) {
             res.on('end', function() {
                 body = JSON.parse(body);
                 // Make sure it's working
+                //var successCount = 0;
                 var subject = body.response.subject;
+                if(subject != undefined)
                 console.log(subject);
-                console.log(counter);
 
-                // ADD THE CALLBACK 
-                // OR 
-                // TRIGGER EVENT
+                
                 //PostRequest();
-
-                if (subject == undefined) {
-                    fs.appendFile('undefined.txt', array[counter].toString() + '\n', (err) => {
-                        if (err) throw err;
-
-                    });
-                } else {
-
-                    fs.appendFile('message.txt', array[counter].toString() + '\n', (err) => {
-                        if (err) throw err;
-
-                    });
-                }
-
-
-                return emitter.emit('ResponseEnded');
+                //return emitter.emit('ResponseEnded');
 
             });
         });
 
         var url = array[counter];
-        //console.log(url);
+
         var catURL = { "url": url };
-        //console.log(catURL);
-        var jsonURL = catURL.toString();
-
-
         post_req.write(JSON.stringify(catURL));
         post_req.end();
+        //console.log(counter);
+        counter++;
     }
 
-
-    emitter.on('ResponseEnded', function() {
-        counter++;
-        if (counter < n) {
-            PostRequest();
-        } else {
-            console.log('No more requests');
-        }
-    });
-
-
-    PostRequest();
+    // emitter.on('ResponseEnded', function() {
+    //     counter++;
+    //     if (counter < n) {
+    //         PostRequest();
+    //     } else {
+    //         console.log('No more requests');
+    //     }
+    // });
+    //PostRequest();
 });
