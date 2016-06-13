@@ -39,6 +39,7 @@ fs.readFile('alexa.txt', function(err, data) {
 
 
     function PostRequest() {
+    //for (var i = 0; i < array.length - 1; i++) {
         var post_req = http.request(post_options, function(res) {
             res.setEncoding('utf8');
             var body = '';
@@ -51,7 +52,7 @@ fs.readFile('alexa.txt', function(err, data) {
                 var subject = time.response.subject;
                 if (subject == undefined) {
 
-                    console.log('Undefined');
+                    //console.log('Undefined');
                 } else {
                     var valid_from = time.response.valid_from;
                     var valid_to = time.response.valid_to;
@@ -60,17 +61,23 @@ fs.readFile('alexa.txt', function(err, data) {
                     var validTo = DateTo(valid_to);
 
                     var dateNow = new Date();
+                    var expiring;
+                    if ((validTo - dateNow) <= 7776000000)
+                        expiring = true;
+                    else
+                        expiring = false;
 
-                    if (dateNow >= validTo) {
-                        fs.appendFile('expired.txt', array[counter].toString() + '\n', (err) => {
+                    if (expiring) {
+                        fs.appendFile('expiring1.txt', array[counter].toString() + '\n', (err) => {
                             if (err) throw err;
 
                         });
                     }
-
-                    console.log(time.response.subject.CN)
+                    console.log(validTo)
+                    console.log(expiring);
+                    console.log(time.response.subject.CN);
                     console.log(counter);
-                    //console.log(validTo);
+                    
                 }
                 return emitter.emit('ResponseEnded');
 
@@ -86,6 +93,7 @@ fs.readFile('alexa.txt', function(err, data) {
 
         post_req.write(JSON.stringify(catURL));
         post_req.end();
+        
     }
 
     function DateFrom(dateStart) {
